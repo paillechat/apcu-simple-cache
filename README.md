@@ -1,7 +1,7 @@
 # Enum
 
 
-[![Build Status](https://travis-ci.org/paillechat/apcu-simple-cache.svg?branch=master)](https://travis-ci.org/paillechat/apcu-simple-cache)
+[![Build Status](https://scrutinizer-ci.com/g/paillechat/apcu-simple-cache/badges/build.png?b=master)](https://scrutinizer-ci.com/g/paillechat/apcu-simple-cache/build-status/master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/paillechat/apcu-simple-cache/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/paillechat/apcu-simple-cache/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/paillechat/apcu-simple-cache/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/paillechat/apcu-simple-cache/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/paillechat/apcu-simple-cache/version.png)](https://packagist.org/packages/paillechat/apcu-simple-cache)

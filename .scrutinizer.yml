@@ -1,0 +1,32 @@
+build:
+    nodes:
+        php: &default
+            environment:
+                php:
+                  version: 5.6
+                  ini:
+                    apc.enable_cli: "1"
+            dependencies:
+                before:
+                    - composer install
+
+            tests:
+                override:
+                    -
+                        command: 'vendor/bin/phpunit --coverage-clover=coverage.xml'
+                        coverage:
+                            file: 'coverage.xml'
+                            format: 'clover'
+        php71:
+            <<: *default
+            environment:
+                php:
+                  version: 7.1
+                  ini:
+                    apc.enable_cli: "1"
+checks:
+    php: true
+
+filter:
+    excluded_paths:
+        - tests/*

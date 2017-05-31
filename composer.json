@@ -1,6 +1,7 @@
 {
     "name": "paillechat/apcu-simple-cache",
     "description": "PSR-16 apcu implementation",
+    "keywords": ["PSR-16", "cache", "apcu"],
     "type": "library",
     "authors": [
         {

@@ -11,7 +11,7 @@ class ApcuCacheTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->cache = new ApcuCache();
+        $this->cache = new ApcuCache('test_');
     }
 
     public function testBasicallyFunctions()
@@ -131,5 +131,12 @@ class ApcuCacheTest extends \PHPUnit_Framework_TestCase
             'bool' => [false],
             'resource' => [fopen('/tmp/test.1', 'w+')],
         ];
+    }
+
+    public function testWhenApcuUnavailable()
+    {
+        ini_set('apc.enable_cli', 0);
+
+        new ApcuCache();
     }
 }

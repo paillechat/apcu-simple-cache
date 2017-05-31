@@ -132,7 +132,7 @@ class ApcuCache implements CacheInterface
         $this->assertKeyName($key);
         $key = $this->buildKeyName($key);
 
-        return apcu_exists($key);
+        return (bool) apcu_exists($key);
     }
 
     /**

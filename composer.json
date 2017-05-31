@@ -3,6 +3,7 @@
     "description": "PSR-16 apcu implementation",
     "keywords": ["PSR-16", "cache", "apcu"],
     "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name": "Ilya Burtsev",

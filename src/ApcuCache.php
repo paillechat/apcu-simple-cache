@@ -165,7 +165,7 @@ class ApcuCache implements CacheInterface
      */
     private function assertKeyName($key)
     {
-        if (!is_string($key)) {
+        if (!is_scalar($key) || is_bool($key)) {
             throw new ApcuInvalidCacheKeyException();
         }
     }

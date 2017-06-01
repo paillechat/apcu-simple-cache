@@ -124,12 +124,30 @@ class ApcuCacheTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'null' => [null],
-            'int' => [1],
-            'float' => [1.1],
             'object' => [new \stdClass()],
             'array' => [[]],
             'bool' => [false],
             'resource' => [fopen('/tmp/test.1', 'w+')],
+        ];
+    }
+
+    /**
+     * @dataProvider dataForTestSetAndGetWithAllowedKeys
+     *
+     * @param $key
+     */
+    public function testSetAndGetWithAllowedKeys($key)
+    {
+        $this->cache->set($key, 'foo');
+        $this->assertEquals('foo', $this->cache->get($key));
+    }
+
+    public function dataForTestSetAndGetWithAllowedKeys()
+    {
+        return [
+            [5],
+            [1.1],
+            ['bar'],
         ];
     }
 

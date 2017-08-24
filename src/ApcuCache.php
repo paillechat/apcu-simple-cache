@@ -30,7 +30,12 @@ class ApcuCache implements CacheInterface
         $this->assertKeyName($key);
         $key = $this->buildKeyName($key);
 
-        return apcu_fetch($key) ?:$default;
+        $value = apcu_fetch($key, $success);
+        if ($success === false) {
+            return $default;
+        }
+
+        return $value;
     }
 
     /**
@@ -73,9 +78,9 @@ class ApcuCache implements CacheInterface
         $this->assertKeyNames($keys);
         $keys = $this->buildKeyNames($keys);
 
-        $result = apcu_fetch($keys);
+        $result = apcu_fetch($keys, $success);
 
-        if (!is_null($default) && is_array($result) && count($keys) > count($result)) {
+        if ($success && !is_null($default) && is_array($result) && count($keys) > count($result)) {
             $notFoundKeys = array_diff($keys, array_keys($result));
             $result = array_merge($result, array_fill_keys($notFoundKeys, $default));
         }

@@ -30,7 +30,12 @@ class ApcuCache implements CacheInterface
         $this->assertKeyName($key);
         $key = $this->buildKeyName($key);
 
-        return apcu_fetch($key) ?:$default;
+        $value = apcu_fetch($key, $success);
+        if ($success === false) {
+            return $default;
+        }
+
+        return $value;
     }
 
     /**

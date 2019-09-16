@@ -162,7 +162,7 @@ class ApcuCache implements CacheInterface
      *
      * @throws ApcuInvalidCacheKeysException
      */
-    private function buildKeyNames($keys)
+    private function buildKeyNames(array $keys)
     {
         return array_map(function ($key) {
             return $this->buildKeyName($key);

@@ -3,6 +3,7 @@
 namespace Paillechat\ApcuSimpleCache;
 
 use Paillechat\ApcuSimpleCache\Exception\ApcuInvalidCacheKeyException;
+use Paillechat\ApcuSimpleCache\Exception\ApcuInvalidCacheKeysException;
 use Psr\SimpleCache\CacheInterface;
 
 class ApcuCache implements CacheInterface
@@ -11,6 +12,7 @@ class ApcuCache implements CacheInterface
      * @var string
      */
     private $namespace;
+
     /**
      * @var int
      */
@@ -48,7 +50,7 @@ class ApcuCache implements CacheInterface
 
         $ttl = is_null($ttl) ? $this->defaultLifetime : $ttl;
 
-        return apcu_store($key, $value, (int) $ttl);
+        return apcu_store($key, $value, (int)$ttl);
     }
 
     /**
@@ -75,6 +77,7 @@ class ApcuCache implements CacheInterface
      */
     public function getMultiple($keys, $default = null)
     {
+        $keys = $this->convertKeysToArray($keys);
         $this->assertKeyNames($keys);
         $keys = $this->buildKeyNames($keys);
 
@@ -101,6 +104,7 @@ class ApcuCache implements CacheInterface
      */
     public function setMultiple($values, $ttl = null)
     {
+        $values = $this->convertKeysToArray($values);
         $this->assertKeyNames(array_keys($values));
 
         $mappedByNamespaceValues = [];
@@ -111,9 +115,9 @@ class ApcuCache implements CacheInterface
 
         $ttl = is_null($ttl) ? $this->defaultLifetime : $ttl;
 
-        $result = apcu_store($mappedByNamespaceValues, (int) $ttl);
+        $result = apcu_store($mappedByNamespaceValues, (int)$ttl);
 
-        return $result === true ? true : (is_array($result) && count($result) == 0 ? true: false);
+        return $result === true ? true : (is_array($result) && count($result) == 0 ? true : false);
     }
 
     /**
@@ -121,6 +125,7 @@ class ApcuCache implements CacheInterface
      */
     public function deleteMultiple($keys)
     {
+        $keys = $this->convertKeysToArray($keys);
         $this->assertKeyNames($keys);
         $keys = $this->buildKeyNames($keys);
 
@@ -137,7 +142,7 @@ class ApcuCache implements CacheInterface
         $this->assertKeyName($key);
         $key = $this->buildKeyName($key);
 
-        return (bool) apcu_exists($key);
+        return (bool)apcu_exists($key);
     }
 
     /**
@@ -154,13 +159,14 @@ class ApcuCache implements CacheInterface
      * @param string[] $keys
      *
      * @return string[]
+     *
+     * @throws ApcuInvalidCacheKeysException
      */
-    private function buildKeyNames(array $keys)
+    private function buildKeyNames($keys)
     {
-        return array_map(function($key) {
+        return array_map(function ($key) {
             return $this->buildKeyName($key);
         }, $keys);
-
     }
 
     /**
@@ -185,5 +191,33 @@ class ApcuCache implements CacheInterface
         array_map(function ($value) {
             $this->assertKeyName($value);
         }, $keys);
+    }
+
+    /**
+     * @param string[]|object|\Traversable $keys
+     *
+     * @throws ApcuInvalidCacheKeysException
+     */
+    private function convertKeysToArray($keys)
+    {
+        if (!$this->isIterableKeys($keys)) {
+            throw new ApcuInvalidCacheKeysException();
+        }
+
+        return is_array($keys) ? $keys : iterator_to_array($keys);
+    }
+
+    /**
+     * @param string[]|object|\Traversable $keys
+     *
+     * @return bool
+     */
+    private function isIterableKeys($keys)
+    {
+        if (function_exists('is_iterable')) {
+            return is_iterable($keys);
+        }
+
+        return is_array($keys) || (is_object($keys) && ($keys instanceof \Traversable));
     }
 }
